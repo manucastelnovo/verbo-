@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Verbos Rusos</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        #mensaje, #correcta { margin-top: 10px; }
+        input { margin: 5px; padding: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Juego de Verbos Rusos</h1>
+    <p>Escribe la forma <strong>НСВ</strong> y <strong>СВ</strong> del verbo mostrado.</p>
+    <p id="pregunta"></p>
+    <input type="text" id="respuestaNsv" placeholder="НСВ">
+    <input type="text" id="respuestaSv" placeholder="СВ">
+    <button onclick="verificarRespuesta()">Verificar</button>
+    <button onclick="mostrarRespuesta()">Mostrar respuesta</button>
+    <p id="mensaje"></p>
+    <p id="correcta" style="display: none;"></p>
+    <button onclick="nuevaPregunta()">Nueva Pregunta</button>
+
+    <script>
+        const verbos = [
+    { "esp": "tomar (take)", "nsv": "брать", "sv": "взять" },
+    { "esp": "encender (turn on)", "nsv": "включать", "sv": "включить" },
+    { "esp": "elegir (choose)", "nsv": "выбирать", "sv": "выбрать" },
+    { "esp": "apagar (turn off)", "nsv": "выключать", "sv": "выключить" },
+    { "esp": "cocinar (cook)", "nsv": "готовить", "sv": "приготовить" },
+    { "esp": "hacer (do)", "nsv": "делать", "sv": "сделать" },
+    { "esp": "comer (eat)", "nsv": "есть", "sv": "поесть" },
+    { "esp": "ordenar (order)", "nsv": "заказывать", "sv": "заказать" },
+    { "esp": "cerrar (close)", "nsv": "закрывать", "sv": "закрыть" },
+    { "esp": "buscar (search)", "nsv": "искать", "sv": "поискать" },
+    { "esp": "corregir (correct)", "nsv": "исправлять", "sv": "исправить" },
+    { "esp": "cambiar (change)", "nsv": "менять", "sv": "поменять" },
+    { "esp": "lavar (wash)", "nsv": "мыть", "sv": "вымыть" },
+    { "esp": "discutir (discuss)", "nsv": "обсуждать", "sv": "обсудить" },
+    { "esp": "abrir (open)", "nsv": "открывать", "sv": "открыть" },
+    { "esp": "traducir (translate)", "nsv": "переводить", "sv": "перевести" },
+    { "esp": "cantar (sing)", "nsv": "петь", "sv": "спеть" },
+    { "esp": "beber (drink)", "nsv": "пить", "sv": "выпить" },
+    { "esp": "repetir (repeat)", "nsv": "повторять", "sv": "повторить" },
+    { "esp": "comprar (buy)", "nsv": "покупать", "sv": "купить" },
+    { "esp": "recibir (receive)", "nsv": "получать", "sv": "получить" },
+    { "esp": "tomar (accept)", "nsv": "принимать", "sv": "принять" },
+    { "esp": "traer (bring)", "nsv": "приносить", "sv": "принести" },
+    { "esp": "verificar (check)", "nsv": "проверять", "sv": "проверить" },
+    { "esp": "dibujar (draw)", "nsv": "рисовать", "sv": "нарисовать" },
+    { "esp": "lavar (launder)", "nsv": "стирать", "sv": "постирать" },
+    { "esp": "construir (build)", "nsv": "строить", "sv": "построить" },
+    { "esp": "perder (lose)", "nsv": "терять", "sv": "потерять" },
+    { "esp": "limpiar (clean)", "nsv": "убирать", "sv": "убрать" },
+    { "esp": "aprender (learn)", "nsv": "учить", "sv": "выучить" },
+    { "esp": "leer (read)", "nsv": "читать", "sv": "прочитать" },
+    { "esp": "olvidar (forget)", "nsv": "забывать", "sv": "забыть" },
+    { "esp": "resolver (solve)", "nsv": "решать", "sv": "решить" },
+    { "esp": "despertar (wake up)", "nsv": "будить", "sv": "разбудить" },
+    { "esp": "ver (see)", "nsv": "видеть", "sv": "увидеть" },
+    { "esp": "encontrarse (meet)", "nsv": "встречать", "sv": "встретить" },
+    { "esp": "esperar (wait)", "nsv": "ждать", "sv": "подождать" },
+    { "esp": "felicitar (congratulate)", "nsv": "поздравлять", "sv": "поздравить" },
+    { "esp": "entender (understand)", "nsv": "понимать", "sv": "понять" },
+    { "esp": "invitar (invite)", "nsv": "приглашать", "sv": "пригласить" },
+    { "esp": "preguntar (ask)", "nsv": "спрашивать", "sv": "спросить" },
+    { "esp": "hablar (speak)", "nsv": "говорить", "sv": "сказать" },
+    { "esp": "dar (give)", "nsv": "давать", "sv": "дать" },
+    { "esp": "escribir (write)", "nsv": "писать", "sv": "написать" },
+    { "esp": "enviar (send)", "nsv": "посылать", "sv": "послать" },
+    { "esp": "enviar (send)", "nsv": "отправлять", "sv": "отправить" },
+    { "esp": "llamar (call)", "nsv": "звонить", "sv": "позвонить" },
+    { "esp": "verse (meet)", "nsv": "видеться", "sv": "увидеться" },
+    { "esp": "encontrarse (meet)", "nsv": "встречаться", "sv": "встретиться" },
+    { "esp": "acordar (agree)", "nsv": "договариваться", "sv": "договориться" },
+    { "esp": "conocer (meet)", "nsv": "знакомиться", "sv": "познакомиться" },
+    { "esp": "pasear (walk)", "nsv": "гулять", "sv": "погулять" },
+    { "esp": "descansar (rest)", "nsv": "отдыхать", "sv": "отдохнуть" },
+    { "esp": "poder (can)", "nsv": "мочь", "sv": "смочь" },
+    { "esp": "pensar (think)", "nsv": "думать", "sv": "подумать" },
+    { "esp": "hablar (speak)", "nsv": "говорить", "sv": "сказать" },
+    { "esp": "responder (answer)", "nsv": "отвечать", "sv": "ответить" },
+    { "esp": "pagar (pay)", "nsv": "платить", "sv": "заплатить" },
+    { "esp": "jugar (play)", "nsv": "играть", "sv": "поиграть" },
+    { "esp": "volver (return)", "nsv": "возвращаться", "sv": "вернуться" },
+    { "esp": "llegar tarde (be late)", "nsv": "опаздывать", "sv": "опоздать" },
+    { "esp": "acostarse (lie down)", "nsv": "ложиться", "sv": "лечь" },
+    { "esp": "levantarse (get up)", "nsv": "вставать", "sv": "встать" },
+    { "esp": "enfermarse (get sick)", "nsv": "болеть", "sv": "заболеть" },
+    { "esp": "vestirse (get dressed)", "nsv": "одеваться", "sv": "одеться" },
+    { "esp": "desnudarse (undress)", "nsv": "раздеваться", "sv": "раздеться" }
+]
+
+        
+        let verboActual;
+
+        function nuevaPregunta() {
+            verboActual = verbos[Math.floor(Math.random() * verbos.length)];
+            document.getElementById("pregunta").textContent = `¿Cuál es la forma НСВ y СВ de: ${verboActual.esp}?`;
+            document.getElementById("respuestaNsv").value = "";
+            document.getElementById("respuestaSv").value = "";
+            document.getElementById("mensaje").textContent = "";
+            document.getElementById("correcta").style.display = "none";
+        }
+
+        function verificarRespuesta() {
+            const respuestaNsv = document.getElementById("respuestaNsv").value.trim();
+            const respuestaSv = document.getElementById("respuestaSv").value.trim();
+            if (respuestaNsv === verboActual.nsv && respuestaSv === verboActual.sv) {
+                document.getElementById("mensaje").textContent = "¡Correcto! 🎉";
+            } else {
+                document.getElementById("mensaje").textContent = "Incorrecto. Inténtalo de nuevo.";
+            }
+        }
+
+        function mostrarRespuesta() {
+            document.getElementById("correcta").textContent = `Respuesta correcta: ${verboActual.nsv} — ${verboActual.sv}`;
+            document.getElementById("correcta").style.display = "block";
+        }
+
+        nuevaPregunta();
+    </script>
+</body>
+</html>
