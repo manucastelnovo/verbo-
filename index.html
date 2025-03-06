@@ -105,8 +105,8 @@
         }
 
         function verificarRespuesta() {
-            const respuestaNsv = document.getElementById("respuestaNsv").value.trim();
-            const respuestaSv = document.getElementById("respuestaSv").value.trim();
+            const respuestaNsv = document.getElementById("respuestaNsv").value.trim().toLowerCase();
+            const respuestaSv = document.getElementById("respuestaSv").value.trim().toLowerCase();
             if (respuestaNsv === verboActual.nsv && respuestaSv === verboActual.sv) {
                 document.getElementById("mensaje").textContent = "¡Correcto! 🎉";
             } else {
