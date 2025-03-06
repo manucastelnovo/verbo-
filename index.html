@@ -160,11 +160,15 @@
             document.getElementById("pregunta").textContent = `¿Cuál es la forma НСВ y СВ de: ${verboActual.esp}?`;
             document.getElementById("mensaje").textContent = "";
             document.getElementById("correcta").style.display = "none";
+            let inputs = document.getElementsByTagName("input")
+            for (let i = 0; i < inputs.length; i++) {
+                inputs[i].value = "";
+            }
         }
 
         function verificarRespuesta() {
-            const respuestaNsv = document.getElementById("respuestaNsv").value.trim();
-            const respuestaSv = document.getElementById("respuestaSv").value.trim();
+            const respuestaNsv = document.getElementById("respuestaNsv").value.trim().toLowerCase();
+            const respuestaSv = document.getElementById("respuestaSv").value.trim().toLowerCase();
             let correctNsv = respuestaNsv === verboActual.nsv;
             let correctSv = respuestaSv === verboActual.sv;
             
