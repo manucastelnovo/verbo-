@@ -176,7 +176,7 @@
         }
 
         function verificarConjugacion(id, index, esSv = false) {
-            const respuesta = document.getElementById(id).value.trim();
+            const respuesta = document.getElementById(id).value.trim().toLowerCase();
             const correcta = esSv ? verboActual.conjugacionesSv[index] : verboActual.conjugacionesNsv[index];
             alert(respuesta === correcta ? "Correcto! 🎉" : `Incorrecto. La respuesta correcta es: ${correcta}`);
         }
@@ -186,7 +186,7 @@
             let mensaje = "";
             lista.forEach((correcta, index) => {
                 const id = `${esSv ? "sv" : "nsv"}_${["ya", "ty", "on", "my", "vy", "oni"][index]}`;
-                const respuesta = document.getElementById(id).value.trim();
+                const respuesta = document.getElementById(id).value.trim().toLowerCase();
                 mensaje += respuesta === correcta ? `✔ ${correcta}\n` : `✘ ${correcta} (Incorrecto)\n`;
             });
             alert(mensaje);
